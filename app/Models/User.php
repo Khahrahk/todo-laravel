@@ -8,7 +8,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-
 /**
  * @property int $id
  */
@@ -47,24 +46,25 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function sentTo()
+    public function related()
     {
-        return $this->hasMany(SharedTodo::class, 'toId', 'id');
+        return $this->belongsToMany(User::class, 'shared_todos', 'fromId', 'toId');
     }
 
-    public function sentFrom()
+    public function related_one()
     {
-        return $this->hasMany(SharedTodo::class, 'fromId', 'id');
+        return $this->belongsToMany(User::class, 'shared_todos', 'toId', 'fromId');
     }
 
-    public function sharedTodo()
-    {
-        return $this->sentTo()->union($this->sentFrom()->toBase());
-    }
 
     public function todos()
     {
         return $this->hasMany(Todo::class, 'user', 'id');
+    }
+
+    public function tags()
+    {
+        return $this->hasMany(Tag::class, 'userId', 'id');
     }
 
     public function getId()

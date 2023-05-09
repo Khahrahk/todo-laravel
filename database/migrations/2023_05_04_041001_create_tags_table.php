@@ -15,10 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->unsignedBigInteger('todoId');
+            $table->unsignedBigInteger('userId');
             $table->timestamps();
         });
         Schema::table('tags', function (Blueprint $table) {
             $table->foreign('todoId')->references('id')->on('todos');
+        });
+        Schema::table('tags', function (Blueprint $table) {
+            $table->foreign('userId')->references('id')->on('users');
         });
     }
 

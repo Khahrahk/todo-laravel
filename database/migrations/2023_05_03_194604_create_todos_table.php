@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('body');
             $table->tinyInteger('is_active');
-            $table->string('image')->default('k1.jpg');
+            $table->string('image')->default('default.jpg');
             $table->unsignedBigInteger('user');
             $table->timestamps();
         });

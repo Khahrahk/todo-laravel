@@ -17,7 +17,7 @@
                                 </ul>
                             </div>
                         @endif
-                        <form method="post" action="{{ route('todos.store') }}">
+                        <form method="post" action="{{ route('todos.store') }}" enctype="multipart/form-data">
                             @csrf
                             <div class="mb-3">
                                 <label class="form-label">Title</label>
@@ -26,6 +26,10 @@
                             <div class="mb-3">
                                 <label class="form-label">Description</label>
                                 <textarea name="body" class="form-control" cols="5" rows="5"> </textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Image</label>
+                                <input class="form-control form-control-lg" id="formFileLg" type="file" name="image">
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>

@@ -4,16 +4,20 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-
-                <div class="card-body">
+            <div class="card mt-4">
+                <div class="card-body p-5">
                     @if (session('status'))
                         <div class="alert alert-success" role="alert">
                             {{ session('status') }}
                         </div>
                     @endif
-                    <h1>Welcome to TODO app!</h1>
+                    <div class="row">
+                        <div class="col-3"></div>
+                        <div class="col-8">
+                            <h1>Welcome to TODO app!</h1>
+                        </div>
+                        <div class="col-1"></div>
+                    </div>
                 </div>
             </div>
         </div>

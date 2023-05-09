@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">{{ __('Dashboard') }}</div>
+                    <div class="card-header">{{ __('Todos') }}</div>
 
                     <div class="card-body">
                         @if(Session::has('alert-success'))
@@ -13,35 +13,14 @@
                                 {{ Session::get('alert-success') }}
                             </div>
                         @endif
+                        @if(!Auth::guest())
+                            <div class="col-2">
+                                <a class="btn btn-sm btn-primary" href="{{ route('todos.create') }}">Create new todo</a>
+                            </div>
+                            <br>
+                        @endif
                         @if(count($todos) > 0)
                             <form method="get" action="{{ route('todos.search')}}">
-                                @csrf
-                                {{--                                <div class="row">--}}
-                                {{--                                    <div class="col-8"><h3>Todo list</h3>--}}
-                                {{--                                        <div class="row">--}}
-                                {{--                                            <div class="row justify-content-end">--}}
-                                {{--                                                <div class="col-auto mt-1">--}}
-                                {{--                                                    <h4 style="display: inline;">Tags:</h4>--}}
-                                {{--                                                </div>--}}
-                                {{--                                                @if(count($tags) > 0)--}}
-                                {{--                                                    @foreach($tags as $item)--}}
-                                {{--                                                        <div class="col-auto">--}}
-                                {{--                                                            <label class="checkbox-btn">--}}
-                                {{--                                                                <input type="checkbox" name="tag" value="{{ $item }}">--}}
-                                {{--                                                                <span>{{ $item }}</span>--}}
-                                {{--                                                            </label>--}}
-                                {{--                                                        </div>--}}
-                                {{--                                                    @endforeach--}}
-                                {{--                                                @endif--}}
-                                {{--                                            </div>--}}
-                                {{----}}
-                                {{--                                        </div>--}}
-                                {{--                                    </div>--}}
-                                {{--                                    <div class="col-1">--}}
-                                {{--                                        <button type="submit" class="btn btn-primary" style="height: 80px">Search--}}
-                                {{--                                        </button>--}}
-                                {{--                                    </div>--}}
-                                {{--                                </div>--}}
                                 <div class="row">
                                     <div class="col-11">
                                         <div class="row">
@@ -57,13 +36,16 @@
                                             </div>
                                             @if(count($tags) > 0)
                                                 @foreach($tags as $item)
-                                                    <div class="col-auto">
-                                                        <label class="checkbox-btn">
-                                                            <input type="checkbox" name="tag" value="{{ $item }}">
-                                                            <span>{{ $item }}</span>
-                                                        </label>
-                                                    </div>
+                                                    @if($item != null)
+                                                        <div class="col-auto">
+                                                            <label class="checkbox-btn">
+                                                                <input type="checkbox" name="tag[]" value="{{ $item }}">
+                                                                <span>{{ $item }}</span>
+                                                            </label>
+                                                        </div>
+                                                    @endif
                                                 @endforeach
+                                                <div class="col-auto"></div>
                                             @endif
                                         </div>
                                     </div>
@@ -73,7 +55,6 @@
                                     </div>
                                 </div>
                             </form>
-                            <br>
                             <table class="table">
                                 <thead>
                                 <tr>
@@ -89,17 +70,20 @@
                                 @foreach($todos as $item)
                                     <tr>
                                         <td>
-                                            <a href="{{url('k1.jpg')}}">
+                                            <a href="{{url($item->image)}}">
                                                 <img src="{{url($item->image)}}" width="150px" height="150px"
+                                                     class="rounded-3"
                                                      style="border: 1px solid rgba(0, 0, 0, 0.3)">
                                             </a>
                                         </td>
                                         <td>{{ $item->title }}</td>
                                         <td>{{ $item->body }}</td>
                                         <td>
-                                            @foreach($item->tags as $oof)
-                                                {{ $oof->name }}
-                                                <br>
+                                            @foreach($item->tags as $tag)
+                                                <label class="checkbox-btn">
+                                                    <input type="checkbox" disabled>
+                                                    <span>{{ $tag->name }}</span>
+                                                </label>
                                             @endforeach
                                         </td>
                                         <td>
@@ -110,9 +94,13 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a class="btn btn-sm btn-light" href="">Edit</a>
+                                            <a class="btn btn-sm btn-light" href="{{ route('todos.edit', $item->id) }}">Edit</a>
                                             <a class="btn btn-sm btn-light" href="{{ route('todos.show', $item->id) }}">View</a>
-                                            <a class="btn btn-sm btn-light" href="">Submit</a>
+                                            @if($item->is_active == 1)
+                                                <a class="btn btn-sm btn-light" href="{{ route('todos.delete', $item->id) }}">Delete</a>
+                                            @else
+                                                <a class="btn btn-sm btn-light" href="{{ route('todos.submit', $item->id) }}">Submit</a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

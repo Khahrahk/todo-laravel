@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ __('Dashboard') }}</div>
+                    <div class="card-header">{{ __('Users') }}</div>
 
                     <div class="card-body">
 
@@ -28,23 +28,26 @@
                                         <td>{{ $item->name}}</td>
                                         <td>
                                             @if($item->id != Auth::id())
-                                                @if($item->sharedtodo != false)
-                                                    @foreach($item->sharedtodo as $todo)
-                                                        @if($todo->fromId == Auth::id() && $todo->toId == $item->id)
-                                                            <input type="button" class="btn btn-sm btn-danger"
-                                                                   value="delete">
-                                                        @endif
-                                                        @if($todo->fromId == $item->id && $todo->toId == Auth::id())
-                                                            <a href="{{ route('users.view', $item->id) }}"><input type="button" class="btn btn-sm btn-danger" value="View"></a>
-                                                        @endif
-                                                        @if(($todo->fromId != Auth::id() && $todo->toId != $item->id && $todo->toId != Auth::id()))
-                                                                <input type="button" class="btn btn-sm btn-danger"
-                                                                       value="Share">
-                                                        @endif
-                                                    @endforeach
+                                                @foreach($item->related as $related)
+                                                    @if($related->toId = Auth::id() && $related->fromId = $item->id)
+                                                        <a class="btn btn-sm btn-light"
+                                                           href="{{ route('users.view', $item->id) }}">View</a>
+                                                    @endif
+                                                @endforeach
+                                                @foreach($item->related_one as $related)
+                                                    @if($related->fromId = Auth::id() && $related->toId = $item->id)
+                                                        <a class="btn btn-sm btn-light"
+                                                           href="{{ route('users.delete', $item->id) }}">Delete</a>
+                                                    @endif
+                                                @endforeach
+                                                @if(count($item->related_one) > 0)
+                                                @else
+                                                    <a class="btn btn-sm btn-light"
+                                                       href="{{ route('users.share', $item->id) }}">Share</a>
                                                 @endif
                                             @else
-                                                <input type="button" class="btn btn-sm btn-danger" value="this is you">
+                                                <input type="button" class="btn btn-sm btn-danger"
+                                                       value="This is you">
                                             @endif
                                         </td>
                                     </tr>

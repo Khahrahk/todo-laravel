@@ -3,10 +3,8 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">{{ __('Dashboard') }}</div>
-
                     <div class="card-body">
 
                         @if(Session::has('alert-success'))
@@ -25,42 +23,34 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @if($users->id != Auth::id())
-                                @if($users->sharedtodo != false)
-                                    @foreach($users->sharedtodo as $todo)
-                                        @if($todo->fromId == $users->id && $todo->toId == Auth::id())
-                                            @foreach($users->todos as $item)
-                                                <tr>
-                                                    <td>
-                                                        <a href="{{url('k1.jpg')}}">
-                                                            <img src="{{url($item->image)}}" width="150px"
-                                                                 height="150px"
-                                                                 style="border: 1px solid rgba(0, 0, 0, 0.3)">
-                                                        </a>
-                                                    </td>
-                                                    <td>{{ $item->title }}</td>
-                                                    <td>{{ $item->body }}</td>
-                                                    <td>
-                                                        @foreach($item->tags as $oof)
-                                                            {{ $oof->name }}
-                                                            <br>
-                                                        @endforeach
-                                                    </td>
-                                                    <td>
-                                                        @if($item->is_active == 1)
-                                                            <a class="btn btn-sm btn-success" href="">completed</a>
-                                                        @else
-                                                            <a class="btn btn-sm btn-danger" href="">not completed</a>
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                            @endforeach
+                            @foreach($users->todos as $item)
+                                <tr>
+                                    <td>
+                                        <a href="{{url($item->image)}}">
+                                            <img src="{{url($item->image)}}" width="150px" height="150px"
+                                                 class="rounded-3"
+                                                 style="border: 1px solid rgba(0, 0, 0, 0.3)">
+                                        </a>
+                                    </td>
+                                    <td>{{ $item->title }}</td>
+                                    <td>{{ $item->body }}</td>
+                                    <td>
+                                        @foreach($item->tags as $tag)
+                                            <label class="checkbox-btn">
+                                                <input type="checkbox" disabled>
+                                                <span>{{ $tag->name }}</span>
+                                            </label>
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @if($item->is_active == 1)
+                                            <a class="btn btn-sm btn-success" href="">completed</a>
+                                        @else
+                                            <a class="btn btn-sm btn-danger" href="">not completed</a>
                                         @endif
-                                    @endforeach
-                                @endif
-                            @else
-                                <input type="button" class="btn btn-sm btn-danger" value="this is you">
-                            @endif
+                                    </td>
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
                         <div class="row">
